@@ -1,42 +1,31 @@
 import React, { useState } from "react";
 
 import "./App.css";
-import GameContextProvider from "./useGameContext";
+import EndGame from "./EndGame";
+import InGame from "./InGame";
+import MainMenu from "./MainMenu";
+import GameContextProvider, { useGameContext } from "./useGameContext";
 
 function App() {
   return (
     <GameContextProvider>
-      <MainMenu />
+      <StatusManagerCheker statusis={0}>
+        <MainMenu />
+      </StatusManagerCheker>
+      <StatusManagerCheker statusis={1}>
+        <InGame />
+      </StatusManagerCheker>
+      <StatusManagerCheker statusis={2}>
+        <EndGame />
+      </StatusManagerCheker>
     </GameContextProvider>
   );
 }
 
-const MainMenu = () => {
-  const [NumberOfQuestion, setNumberOfQuestion] = useState(10);
-  const onChangeRange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNumberOfQuestion(parseInt(e.currentTarget.value));
-  };
-  const Start = () => {
-    console.log("Start");
-  };
-  return (
-    <div className="mainmenu">
-      <h1>Voulez vous faire un quiz de culture générale ?</h1>
-      <div className="questionnumber">
-        <p>Combien de question voulez vous faire ?</p>
-        <input
-          type="range"
-          value={NumberOfQuestion}
-          onChange={onChangeRange}
-          min={1}
-          max={20}
-        />
-        <p>{NumberOfQuestion}</p>
-      </div>
-      <button className="button" onClick={Start}>
-        Commencer
-      </button>
-    </div>
-  );
+const StatusManagerCheker = ({ statusis, children }: any) => {
+  const { status } = useGameContext();
+  if (status == statusis) {
+    return children;
+  }
 };
 export default App;
